@@ -1,6 +1,7 @@
 #cloud-config
 apt_sources:
- - source: "deb http://downloads.gridcentric.com/reactor/${KEY}/reactor/precise gridcentric multiverse"
+ - source: "deb http://downloads.gridcentric.com/packages/reactor/reactor/precise gridcentric multiverse"
+ - source: "deb http://downloads.gridcentric.com/packages/cobaltclient/grizzly/precise gridcentric multiverse"
    key: |
        -----BEGIN PGP PUBLIC KEY BLOCK-----
        Version: GnuPG v1.4.11 (GNU/Linux)
@@ -23,6 +24,7 @@ package_upgrade: true
 packages:
  - nginx
  - dnsmasq
+ - cobalt-novaclient
  - reactor-server
 runcmd:
  - rm -f /etc/nginx/sites-enabled/*
