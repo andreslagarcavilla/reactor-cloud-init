@@ -1,0 +1,23 @@
+#!/bin/bash
+# We provide a full bash script because EPEL cloud-init does not provide
+# CloudConfig modules that can handle yum repos. Yum repo creation and gpg key
+# import can thus only be set up with an old school script
+rpm --import http://downloads.gridcentriclabs.com/packages/gridcentric.key
+cat > /etc/yum.repos.d/reactor.repo <<EOF
+[gridcentric-cobaltclient]
+name=Cobalt Extension for novaclient
+baseurl=http://downloads.gridcentriclabs.com/packages/cobaltclient/grizzly/centos/
+gpgcheck=1
+enabled=1
+ 
+[gridcentric-reactor]
+name=Gridcentric Reactor
+baseurl=http://downloads.gridcentriclabs.com/reactor/${KEY}/reactor/centos/
+gpgcheck=1
+enabled=1
+EOF
+yum -y install nginx haproxy dnsmasq zookeeper socat python-novaclient cobalt-novaclient reactor-server
+rm -f /etc/nginx/sites-enabled/*
+mv /etc/reactor/example/nginx/nginx.conf /etc/nginx/nginx.conf
+/etc/init.d/nginx restart
+reactor-defaults
